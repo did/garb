@@ -13,7 +13,7 @@ class ResourceTest < Test::Unit::TestCase
       TestReport.expects(:send_request_for_body).returns('xml')
       Garb::ReportResponse.expects(:new).with('xml').returns(mock(:results => 'analytics'))
 
-      assert_equal 'analytics', TestReport.results(profile)
+      assert_equal 'analytics', TestReport.results('token', profile)
     end
   end
 end

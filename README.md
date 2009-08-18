@@ -1,3 +1,8 @@
+"I plan to update your gem in order to get rid of global sessions. I don't know if you guys have a precise idea about how to solve this issue.
+I do not think it's a big deal to pass the session token each time we call the google api. The main problem is resource.rb 
+"
+
+
 garb
 ====
 

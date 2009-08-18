@@ -1,7 +1,7 @@
 module Garb
   class Profile
     
-    attr_reader :table_id, :title, :account_name, :account_id
+    attr_reader :table_id, :title, :account_name, :account_id, :profile_id
     
     class Property
       include HappyMapper
@@ -41,9 +41,10 @@ module Garb
       @table_id.from_ga
     end
 
-    def self.all
+    def self.all(auth_token)
       url = "https://www.google.com/analytics/feeds/accounts/default"
-      response = DataRequest.new(url).send_request      
+      response = DataRequest.new(auth_token, url).send_request
+      
       Entry.parse(response.body).map {|entry| new(entry)}
     end
   end

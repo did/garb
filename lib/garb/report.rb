@@ -5,7 +5,8 @@ module Garb
     MONTH = 2592000
     URL = "https://www.google.com/analytics/feeds/data"
 
-    def initialize(profile, opts={})
+    def initialize(auth_token, profile, opts={})
+      @auth_token = auth_token
       @profile = profile
 
       @start_date = opts.fetch(:start_date, Time.now - MONTH)

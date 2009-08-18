@@ -35,7 +35,8 @@ module Garb
         @sorts ||= ReportParameter.new(:sort)
       end
 
-      def results(profile, opts = {}, &block)
+      def results(auth_token, profile, opts = {}, &block)
+        @auth_token = auth_token
         @profile = profile
 
         # clear filters and sort
@@ -79,7 +80,7 @@ module Garb
       end
 
       def send_request_for_body
-        request = DataRequest.new(URL, params)
+        request = DataRequest.new(@auth_token, URL, params)
         response = request.send_request
         response.body
       end

@@ -7,8 +7,9 @@ module Garb
       setup do
         @now = Time.now
         Time.stubs(:now).returns(@now)
+        @auth_token = 'token'
         @profile = stub(:table_id => 'ga:1234')
-        @report = Report.new(@profile)
+        @report = Report.new(@auth_token, @profile)
       end
 
       %w(metrics dimensions filters sorts).each do |param|
@@ -44,7 +45,7 @@ module Garb
         request = mock {|m| m.expects(:send_request).returns(response) }
         @report.expects(:params).returns('params')
 
-        DataRequest.expects(:new).with(Garb::Report::URL, 'params').returns(request)
+        DataRequest.expects(:new).with('token', Garb::Report::URL, 'params').returns(request)
         assert_equal 'response body', @report.send_request_for_body
       end
 
@@ -58,7 +59,7 @@ module Garb
     context "An instance of the Report class with initial options" do
       setup do
         @profile = stub(:table_id => 'ga:1234')
-        @report = Report.new(@profile, :limit => 10, :offset => 20)
+        @report = Report.new(@auth_token, @profile, :limit => 10, :offset => 20)
       end
 
       should "have page paramaters" do

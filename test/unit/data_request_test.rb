@@ -7,7 +7,7 @@ module Garb
 
       should "be able to build the query string from parameters" do
         parameters = {'ids' => '12345', 'metrics' => 'country'}
-        data_request = DataRequest.new("", parameters)
+        data_request = DataRequest.new("", "", parameters)
         
         query_string = data_request.query_string
         
@@ -17,9 +17,14 @@ module Garb
         
         assert_equal ["ids=12345", "metrics=country"], query_string.split('&').sort
       end
+
+      should "return an empty query string if both token and parameters are empty" do
+        data_request = DataRequest.new("", "")
+        assert_equal "", data_request.query_string
+      end
       
       should "return an empty query string if parameters are empty" do
-        data_request = DataRequest.new("")
+        data_request = DataRequest.new("token", "")
         assert_equal "", data_request.query_string
       end
       
@@ -27,11 +32,11 @@ module Garb
         url        = 'http://example.com'
         expected = URI.parse('http://example.com')
         
-        assert_equal expected, DataRequest.new(url).uri
+        assert_equal expected, DataRequest.new("token", url).uri
       end
       
       should "be able to make a request to the GAAPI" do
-        Session.expects(:auth_token).with().returns('toke')
+        # Session.expects(:auth_token).with().returns('toke')
         response = mock
         response.expects(:is_a?).with(Net::HTTPOK).returns(true)
         
@@ -43,7 +48,7 @@ module Garb
         
         Net::HTTP.expects(:new).with('example.com', 443).returns(http)
         
-        data_request = DataRequest.new('https://example.com/data', 'key' => 'value')
+        data_request = DataRequest.new('toke', 'https://example.com/data', 'key' => 'value')        
         assert_equal response, data_request.send_request
       end
     end

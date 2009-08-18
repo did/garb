@@ -115,7 +115,5 @@ module Garb
       
     end
     
-    
-    
   end
 end

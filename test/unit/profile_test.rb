@@ -13,7 +13,7 @@ module Garb
         data_request = mock
         data_request.expects(:send_request).with().returns(stub(:body => xml))
         
-        DataRequest.expects(:new).with(url).returns(data_request)
+        DataRequest.expects(:new).with('token', url).returns(data_request)
         
         entries = [stub]
         
@@ -26,7 +26,7 @@ module Garb
           Garb::Profile.expects(:new).with(entry).returns(profile)
         end
         
-        assert_equal profiles, Profile.all
+        assert_equal profiles, Profile.all('token')
       end
       
     end
