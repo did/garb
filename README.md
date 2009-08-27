@@ -1,8 +1,3 @@
-"I plan to update your gem in order to get rid of global sessions. I don't know if you guys have a precise idea about how to solve this issue.
-I do not think it's a big deal to pass the session token each time we call the google api. The main problem is resource.rb 
-"
-
-
 garb
 ====
 
@@ -32,19 +27,17 @@ Basic Usage
 Login
 -----
   
-    > Garb::Session.login(username, password)
+    > token = Garb::Session.login(username, password)
 
 Accounts
 --------
-    > Garb::Account.all
+    > Garb::Account.all(token)
 
 Profiles
 --------
-
-    > Garb::Account.first.profiles
     
-    > Garb::Profile.all
-    > profile = Garb::Profile.all.first
+    > Garb::Profile.all(token)
+    > profile = Garb::Profile.all(token).first
 
 Define a Report Class and Get Results
 -------------------------------------
@@ -86,11 +79,11 @@ Building a Report
 
   Given the class, session, and profile from above we can do:
 
-    Exits.results(profile, :limit => 10, :offset => 19)
+    Exits.results(token, profile, :limit => 10, :offset => 19)
 
   Or, with sorting and filters:
 
-    Exits.results(profile, :limit => 10, :offset => 19) do
+    Exits.results(token, profile, :limit => 10, :offset => 19) do
       filter :request_uri.contains => 'season', :exits.gt => 100
       sort :exits
     end
@@ -100,7 +93,7 @@ Building a Report
 Build a One-Off Report
 ----------------------
 
-    report = Garb::Report.new(profile)
+    report = Garb::Report.new(token, profile)
     report.metrics :pageviews
     report.dimensions :request_uri
 
